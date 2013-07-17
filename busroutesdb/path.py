@@ -18,7 +18,7 @@ class MainPage(webapp2.RequestHandler):
                 if len(stages) >= 2:
                     start,end = stages[0].lower(),stages[1].lower()
         if not points or not start or not end:
-            self.response.out.write('<html><head><meta name="txtweb-appkey" content="" /></head><body>Get bus route for any two places. <br /> To use, SMS @busroutes location1,location2 to 92665 92665 <br />Eg: @busroutes thiruvanmiyur,central</body></html>')
+            self.response.out.write('<html><head><meta name="txtweb-appkey" content="app-key" /></head><body>Get bus route for any two places. <br /> To use, SMS @busroutes location1,location2 to 92665 92665 <br />Eg: @busroutes thiruvanmiyur,central</body></html>')
             return
         all_stages = self.get_stages()
         if all_stages:
@@ -38,12 +38,12 @@ class MainPage(webapp2.RequestHandler):
                 else:
                     msg = '%sPlease select different ending point.'%msg
             if msg:
-                self.response.out.write('<html><head><meta name="txtweb-appkey" content="" /></head><body>%s<br />Thanks to busroutes.in</body></html>'%(msg))
+                self.response.out.write('<html><head><meta name="txtweb-appkey" content="app-key" /></head><body>%s<br />Thanks to busroutes.in</body></html>'%(msg))
             else:
                 start_id = start_stage_info['stage_id']
                 end_id = end_stage_info['stage_id']
                 bus_route = self.get_bus_route(start_id, end_id)
-                self.response.out.write('<html><head><meta name="txtweb-appkey" content="" /></head><body>Bus Route for %s to %s: <br />%s<br />Thanks to busroutes.in</body></html>'%(start_stage_info['stage_req'], end_stage_info['stage_req'], bus_route))
+                self.response.out.write('<html><head><meta name="txtweb-appkey" content="app-key" /></head><body>Bus Route for %s to %s: <br />%s<br />Thanks to busroutes.in</body></html>'%(start_stage_info['stage_req'], end_stage_info['stage_req'], bus_route))
 
     def get_stages(self):
         stages_api = 'http://busroutes.in/chennai/api/autocomplete/stages'
@@ -70,6 +70,7 @@ class MainPage(webapp2.RequestHandler):
             bus_route = bus_route.replace('</span>',',')
             bus_route = re.sub('<.*?>','',bus_route)
             bus_route = bus_route.replace('From','<br>From')
+            bus_route = bus_route.replace('Take','<br>Take')
             bus_route = '<br>'.join(bus_route.split('<br>')[1:])
         else:
             bus_route = ''
