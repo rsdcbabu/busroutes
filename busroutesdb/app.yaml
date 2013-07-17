@@ -1,0 +1,11 @@
+application: busroutesdb 
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /getpath
+  script: path.application
+- url: /
+  script: welcome.application
